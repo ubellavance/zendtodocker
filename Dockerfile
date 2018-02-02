@@ -9,6 +9,9 @@
 FROM    centos:centos7
 MAINTAINER "ubellavance"
 ENV container=docker \
+	defaultEmailDomain="lubik.ca" \
+	language="fr_FR" \
+	serverRoot="zendto.lubik.ca" \
 	SMTPserver="relais.videotron.ca" \
 	SMTPport="25" \
 	SMTPsecure="" \
