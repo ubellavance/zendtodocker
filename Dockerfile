@@ -11,8 +11,8 @@ MAINTAINER "ubellavance"
 ENV container=docker \
 	SMTPserver="relais.videotron.ca" \
 	SMTPport="25" \
-	SMTPsecure="nagios" \
-	SMTPpassword="nagios" \
+	SMTPsecure="" \
+	SMTPpassword="" \
 	clamdscan="DISABLED" \
 	ServiceTitle="ZendTo" \
 	OrganizationShortName="Lubik" \
