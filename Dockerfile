@@ -33,13 +33,13 @@ RUN yum install -y \
 	yum-utils \
 	php \
 	php-cli \
-  php-mbstring\
-  php-pdo
+  	php-mbstring\
+	php-pdo\
 	mlocate \
 	vim-common \
 	vim-enhanced \
 	wget \
-  which \
+  	which \
 	htop
 
 CMD [ "/bin/bash", "-c", "/usr/sbin/httpd" ]
