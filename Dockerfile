@@ -34,6 +34,7 @@ RUN yum install -y \
 	httpd \
 	mod_ssl \
 	yum-utils \
+	deltarpm \
 	php \
 	php-cli \
   	php-mbstring\
