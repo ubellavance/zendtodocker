@@ -74,6 +74,3 @@ VOLUME /opt/zendto/config
 VOLUME /opt/zendto/templates
 # Data (includes uploads and SQLite DB, plus other stuff)
 VOLUME /var/zendto
-
-# Start httpd
-ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]
