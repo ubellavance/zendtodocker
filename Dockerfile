@@ -25,16 +25,17 @@ ENV container=docker \
 	TIMEZONE="EST"
 
 # Lets get the latest patches for CentOS
+
+RUN yum -y install deltarpm
+
 RUN yum clean all \
 	&& yum update -y \
-  && yum update clean
 
 # Install Nagios prereq's and some common stuff (we will get the epel release for the nagios install).
 RUN yum install -y \
 	httpd \
 	mod_ssl \
 	yum-utils \
-	deltarpm \
 	php \
 	php-cli \
   	php-mbstring\
@@ -46,6 +47,17 @@ RUN yum install -y \
   	which \
 	htop
 
+# Install yum repos
+
+RUN yum -y install epel-release
+RUN rpm -ivhf http://zend.to/files/zendto-repo.rpm
+
+# Install ZendTo rpm
+
+RUN yum -y install zendto
+
+RUN yum clean all
+
 CMD [ "/bin/bash", "-c", "/usr/sbin/httpd" ]
 
 # Open ports for http/https/ntp
@@ -54,7 +66,7 @@ EXPOSE 443
 # 80 is for http
 EXPOSE 80
 
-# Volumes
+## Volumes
 
 # Config files
 VOLUME /opt/zendto/config
