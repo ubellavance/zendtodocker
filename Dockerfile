@@ -58,8 +58,6 @@ RUN yum -y install zendto
 
 RUN yum clean all
 
-CMD [ "/bin/bash", "-c", "/usr/sbin/httpd" ]
-
 # Open ports for http/https/ntp
 # 443 is for https
 EXPOSE 443
@@ -74,3 +72,5 @@ VOLUME /opt/zendto/config
 VOLUME /opt/zendto/templates
 # Data (includes uploads and SQLite DB, plus other stuff)
 VOLUME /var/zendto
+
+ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]
