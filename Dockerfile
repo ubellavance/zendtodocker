@@ -61,7 +61,7 @@ RUN yum clean all
 # Configuration stage
 
 
-RUN sed -i s/"OrganizationShortName = \"Southampton\"\"/"OrganizationShortName = \"$OrganizationShortName\""/g /opt/zendto/config/zendto.conf
+RUN sed -i s/"OrganizationShortName = \"Southampton\""/"OrganizationShortName = \"$OrganizationShortName\""/g /opt/zendto/config/zendto.conf
 
 #RUN sed -i s/OrganizationShortName = \"Southampton\"/OrganizationShortName = \"Lubik\"/g /opt/zendto/config/zendto.conf
 #RUN sed -i s/OrganizationShortType = \"University\"/OrganizationShortType = \"Organization\"/g /opt/zendto/config/zendto.conf
