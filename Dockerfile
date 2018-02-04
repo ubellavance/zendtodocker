@@ -28,10 +28,11 @@ ENV container=docker \
 RUN yum -y install deltarpm
 
 RUN yum clean all \
-	&& yum update -y \
+	&& yum update -y
 
 # Install Nagios prereq's and some common stuff (we will get the epel release for the nagios install).
 RUN yum install -y \
+	less \
 	httpd \
 	mod_ssl \
 	yum-utils \
@@ -40,9 +41,6 @@ RUN yum install -y \
   	php-mbstring\
 	php-pdo\
 	mlocate \
-	vim-common \
-	vim-enhanced \
-	wget \
   	which \
 	htop
 
