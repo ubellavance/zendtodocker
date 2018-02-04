@@ -4,7 +4,6 @@
 # Builds a basic container that runs ZendTo
 # -----------------------------------------------------------------------------
 
-
 # Base system is CentOS 7
 FROM    centos:centos7
 MAINTAINER "ubellavance"
@@ -60,11 +59,8 @@ RUN yum clean all
 
 # Configuration stage
 
-
 RUN sed -i s/"OrganizationShortName = \"Southampton\""/"OrganizationShortName = \"$OrganizationShortName\""/g /opt/zendto/config/zendto.conf
-#RUN sed -i s/"OrganizationShortName = \"Southampton\""/"OrganizationShortName = \"Lubik\""/g /opt/zendto/config/zendto.conf
 RUN sed -i s/"OrganizationShortType = \"University\""/"OrganizationShortType = \"$OrganizationShortType\""/g /opt/zendto/config/zendto.conf
-
 
 # Open ports for http/https/ntp
 # 443 is for https
