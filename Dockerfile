@@ -60,8 +60,8 @@ RUN yum clean all
 
 # Configuration stage
 
-RUN sed -e s/OrganizationShortName = "Southampton"/OrganizationShortName = "Lubik"/g
-RUN sed -e s/OrganizationShortType = "University"/OrganizationShortType = "Organization"/g
+RUN sed -i s/OrganizationShortName = "Southampton"/OrganizationShortName = "Lubik"/g
+RUN sed -i s/OrganizationShortType = "University"/OrganizationShortType = "Organization"/g
 
 # Open ports for http/https/ntp
 # 443 is for https
