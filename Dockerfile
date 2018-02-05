@@ -70,8 +70,8 @@ RUN sed -i s/"'captcha' => 'google'"/"'captcha' => 'disabled'"/g /opt/zendto/con
 
 # httpd
 
-RUN sed -i 's#/var/www/html#/opt/zendto/www#g' /etc/httpd/conf/httpd.conf
-RUN sed -i 's#/var/www#/opt/zendto/www#g' /etc/httpd/conf/httpd.conf
+RUN sed -i 's-/var/www/html-/opt/zendto/www-g' /etc/httpd/conf/httpd.conf
+RUN sed -i 's-/var/www-/opt/zendto/www-g' /etc/httpd/conf/httpd.conf
 
 # Todo: Configure or disable virus scanning
 
