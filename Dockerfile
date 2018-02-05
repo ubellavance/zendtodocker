@@ -57,8 +57,23 @@ RUN yum clean all
 
 # Configuration stage
 
+# Zendto
+
+# Based on the variables defined in this Dockerfile
 RUN sed -i s/"OrganizationShortName = \"Southampton\""/"OrganizationShortName = \"$OrganizationShortName\""/g /opt/zendto/config/zendto.conf
 RUN sed -i s/"OrganizationShortType = \"University\""/"OrganizationShortType = \"$OrganizationShortType\""/g /opt/zendto/config/zendto.conf
+RUN sed -i s/"'language'             => 'en_US'"/"'language'             => '$language'"/g /opt/zendto/config/preferences.php
+
+# Disable captcha because it's a demo:
+
+RUN sed -i s/"'captcha' => 'google'"/"'captcha' => 'disabled'"/g /opt/zendto/config/preferences.php
+
+# httpd
+
+RUN sed -i 's#/var/www/html#/opt/zendto/www#g' /etc/httpd/conf/httpd.conf
+RUN sed -i 's#/var/www#/opt/zendto/www#g' /etc/httpd/conf/httpd.conf
+
+# Todo: Configure or disable virus scanning
 
 # Open ports for http/https/ntp
 # 443 is for https
