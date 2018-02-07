@@ -60,7 +60,7 @@ RUN yum clean all
 # Zendto
 
 # Based on the variables defined in this Dockerfile
-RUN sed -i s/"OrganizationShortName = \"Southampton\""/"OrganizationShortName = \"$OrganizationShortName\""/g /opt/zendto/config/zendto.conf
+RUN sed -i s/"OrganizationShortName = .*"/"OrganizationShortName = 'Lubik'"/g /opt/zendto/config/zendto.conf
 RUN sed -i s/"OrganizationShortType = \"University\""/"OrganizationShortType = \"$OrganizationShortType\""/g /opt/zendto/config/zendto.conf
 RUN sed -i s/"'language'             => 'en_US'"/"'language'             => '$language'"/g /opt/zendto/config/preferences.php
 
