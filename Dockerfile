@@ -12,7 +12,7 @@ ENV container=docker \
 	language="fr_FR" \
 	serverRoot="zendto.lubik.ca" \
 	SMTPserver="relais.videotron.ca" \
-	SMTPport="25" \
+	SMTPport="587" \
 	SMTPsecure="" \
 	SMTPpassword="" \
 	clamdscan="DISABLED" \
@@ -25,7 +25,6 @@ ENV container=docker \
 
 # Lets get the latest patches for CentOS
 
-RUN yum -y install deltarpm
 
 RUN yum clean all \
 	&& yum update -y
@@ -34,7 +33,6 @@ RUN yum clean all \
 RUN yum install -y \
 	less \
 	httpd \
-	mod_ssl \
 	yum-utils \
 	php \
 	php-cli \
@@ -61,12 +59,17 @@ RUN yum clean all
 
 # Based on the variables defined in this Dockerfile
 RUN sed -i s/"OrganizationShortName = .*"/"OrganizationShortName = 'Lubik'"/g /opt/zendto/config/zendto.conf
-RUN sed -i s/"OrganizationShortType = \"University\""/"OrganizationShortType = \"$OrganizationShortType\""/g /opt/zendto/config/zendto.conf
-RUN sed -i s/"'language'             => 'en_US'"/"'language'             => '$language'"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"OrganizationShortType = .*"/"OrganizationShortType = \"$OrganizationShortType\""/g /opt/zendto/config/zendto.conf
+RUN sed -i s/"'SMTPserver'=>\s+'.*'"/"'SMTPserver'           => '$SMTPserver'"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'SMTPport' *=> [0-9]*,"/"  'SMTPport'     => $SMTPport,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"'SMTPsecure'           => .*"/"'SMTPsecure'           => '$SMTPsecure'"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"'SMTPuser'             => .*"/"'SMTPuser'             => '$SMTPuser'"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"'SMTPpassword'         => .*"/"'SMTPpassword'         => '$SMTPpassword'"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"'language'             => .*"/"'language'             => '$language'"/g /opt/zendto/config/preferences.php
 
 # Disable captcha because it's a demo:
 
-RUN sed -i s/"'captcha' => 'google'"/"'captcha' => 'disabled'"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"'captcha' => .*"/"'captcha' => 'disabled'"/g /opt/zendto/config/preferences.php
 
 # httpd
 
@@ -76,8 +79,6 @@ RUN sed -i 's-/var/www-/opt/zendto/www-g' /etc/httpd/conf/httpd.conf
 # Todo: Configure or disable virus scanning
 
 # Open ports for http/https/ntp
-# 443 is for https
-EXPOSE 443
 # 80 is for http
 EXPOSE 80
 
