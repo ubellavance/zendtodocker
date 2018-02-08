@@ -7,21 +7,6 @@
 # Base system is CentOS 7
 FROM    centos:centos7
 MAINTAINER "ubellavance"
-ENV container=docker \
-	defaultEmailDomain="lubik.ca" \
-	language="fr_FR" \
-	serverRoot="zendto.lubik.ca" \
-	SMTPserver="relais.videotron.ca" \
-	SMTPport="587" \
-	SMTPsecure="" \
-	SMTPpassword="" \
-	clamdscan="DISABLED" \
-	ServiceTitle="ZendTo" \
-	OrganizationShortName="Lubik" \
-	OrganizationShortType="Organization" \
-	EmailSenderAddress="ZendTo <zendto@lubik.ca" \
-	EmailSubjectTag="[ZendTo] " \
-	TIMEZONE="EST"
 
 # Lets get the latest patches for CentOS
 
@@ -54,6 +39,23 @@ RUN yum -y install zendto
 RUN yum clean all
 
 # Configuration stage
+
+# Define variables
+ENV container=docker \
+	defaultEmailDomain="lubik.ca" \
+	language="fr_FR" \
+	serverRoot="zendto.lubik.ca" \
+	SMTPserver="relais.videotron.ca" \
+	SMTPport="25" \
+	SMTPsecure="" \
+	SMTPpassword="" \
+	clamdscan="DISABLED" \
+	ServiceTitle="ZendTo" \
+	OrganizationShortName="Lubik" \
+	OrganizationShortType="Organization" \
+	EmailSenderAddress="ZendTo <zendto@lubik.ca" \
+	EmailSubjectTag="[ZendTo] " \
+	TIMEZONE="EST"
 
 # Zendto
 
