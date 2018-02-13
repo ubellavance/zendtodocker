@@ -47,8 +47,9 @@ ENV container=docker \
 	serverRoot="zendto.lubik.ca" \
 	SMTPserver="relais.videotron.ca" \
 	SMTPport="25" \
-	SMTPsecure="" \
-	SMTPpassword="" \
+	SMTPsecure="true" \
+	SMTPusername="ugousername" \
+	SMTPpassword="ugopassword" \
 	clamdscan="DISABLED" \
 	ServiceTitle="ZendTo" \
 	OrganizationShortName="Lubik" \
@@ -59,15 +60,18 @@ ENV container=docker \
 
 # Zendto
 
+
 # Based on the variables defined in this Dockerfile
-RUN sed -i s/"OrganizationShortName = .*"/"OrganizationShortName = 'Lubik'"/g /opt/zendto/config/zendto.conf
-RUN sed -i s/"OrganizationShortType = .*"/"OrganizationShortType = \"$OrganizationShortType\""/g /opt/zendto/config/zendto.conf
-RUN sed -i s/"'SMTPserver'=>\s+'.*'"/"'SMTPserver'           => '$SMTPserver'"/g /opt/zendto/config/preferences.php
+RUN cp /opt/zendto/config/zendto.conf /root/
+RUN cp /opt/zendto/config/preferences.php /root/
+RUN sed -i s/"^OrganizationShortName = .*"/"OrganizationShortName = \"$OrganizationShortName\""/g /opt/zendto/config/zendto.conf
+RUN sed -i s/"^OrganizationShortType = .*"/"OrganizationShortType = \"$OrganizationShortType\""/g /opt/zendto/config/zendto.conf
+RUN sed -i s/"^  'SMTPserver' *,=> '.*',"/"  'SMTPserver'   => '$SMTPserver',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPport' *=> [0-9]*,"/"  'SMTPport'     => $SMTPport,"/g /opt/zendto/config/preferences.php
-RUN sed -i s/"'SMTPsecure'           => .*"/"'SMTPsecure'           => '$SMTPsecure'"/g /opt/zendto/config/preferences.php
-RUN sed -i s/"'SMTPuser'             => .*"/"'SMTPuser'             => '$SMTPuser'"/g /opt/zendto/config/preferences.php
-RUN sed -i s/"'SMTPpassword'         => .*"/"'SMTPpassword'         => '$SMTPpassword'"/g /opt/zendto/config/preferences.php
-RUN sed -i s/"'language'             => .*"/"'language'             => '$language'"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'SMTPsecure' *=> .*,"/"  'SMTPsecure'   => '$SMTPsecure',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'SMTPusername' *=> .*,"/"  'SMTPusername' => '$SMTPusername',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'SMTPpassword' *=> .*,"/"  'SMTPpassword' => '$SMTPpassword',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'language' *=> .*,"/"  'language'             => '$language',"/g /opt/zendto/config/preferences.php
 
 # Disable captcha because it's a demo:
 
