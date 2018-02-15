@@ -16,16 +16,20 @@ RUN yum clean all \
 
 # Install Nagios prereq's and some common stuff (we will get the epel release for the nagios install).
 RUN yum install -y \
+	top \
+	clamav \
 	less \
+	htop \
 	httpd \
-	yum-utils \
+	mlocate \
 	php \
 	php-cli \
   	php-mbstring\
 	php-pdo\
-	mlocate \
+	php-imap\
   	which \
-	htop
+	vim \
+	yum-utils
 
 # Install yum repos
 
@@ -66,6 +70,7 @@ RUN cp /opt/zendto/config/zendto.conf /root/
 RUN cp /opt/zendto/config/preferences.php /root/
 RUN sed -i s/"^OrganizationShortName = .*"/"OrganizationShortName = \"$OrganizationShortName\""/g /opt/zendto/config/zendto.conf
 RUN sed -i s/"^OrganizationShortType = .*"/"OrganizationShortType = \"$OrganizationShortType\""/g /opt/zendto/config/zendto.conf
+RUN /bin/sed -i s/"^  'defaultEmailDomain' *=> '.*',"/"  'defaultEmailDomain'   => '$defaultEmailDomain',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPserver' *,=> '.*',"/"  'SMTPserver'   => '$SMTPserver',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPport' *=> [0-9]*,"/"  'SMTPport'     => $SMTPport,"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPsecure' *=> .*,"/"  'SMTPsecure'   => '$SMTPsecure',"/g /opt/zendto/config/preferences.php
