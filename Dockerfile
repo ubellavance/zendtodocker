@@ -75,7 +75,7 @@ RUN sed -i s/"^  'language' *=> .*,"/"  'language'             => '$language',"/
 
 # Disable captcha because it's a demo:
 
-RUN sed -i s/"'captcha' => .*"/"'captcha' => 'disabled'"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"'captcha' => .*"/"'captcha' => 'disabled',"/g /opt/zendto/config/preferences.php
 
 # httpd
 
