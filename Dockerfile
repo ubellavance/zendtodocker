@@ -8,7 +8,7 @@
 FROM    centos:centos7
 MAINTAINER "ubellavance"
 
-# Lets get the latest patches for CentOS
+# Let's get the latest patches for CentOS
 
 
 RUN yum clean all \
@@ -54,6 +54,9 @@ ENV container=docker \
 	demofullname="demofull1" \
 	demoorg="demoorg1" \
 	language="fr_FR" \
+# 2GB
+	maxdropoffsize="2147483648" \
+	maxeachfilesize="2147483648" \
 	serverRoot="zendto.lubik.ca" \
 	SMTPserver="relais.videotron.ca" \
 	SMTPport="25" \
@@ -76,13 +79,18 @@ RUN cp /opt/zendto/config/zendto.conf /root/
 RUN cp /opt/zendto/config/preferences.php /root/
 RUN sed -i s/"^OrganizationShortName = .*"/"OrganizationShortName = \"$OrganizationShortName\""/g /opt/zendto/config/zendto.conf
 RUN sed -i s/"^OrganizationShortType = .*"/"OrganizationShortType = \"$OrganizationShortType\""/g /opt/zendto/config/zendto.conf
-RUN /bin/sed -i s/"^  'defaultEmailDomain' *=> '.*',"/"  'defaultEmailDomain'   => '$defaultEmailDomain',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'defaultEmailDomain' *=> '.*',"/"  'defaultEmailDomain'   => '$defaultEmailDomain',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPserver' *,=> '.*',"/"  'SMTPserver'   => '$SMTPserver',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPport' *=> [0-9]*,"/"  'SMTPport'     => $SMTPport,"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPsecure' *=> .*,"/"  'SMTPsecure'   => '$SMTPsecure',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPusername' *=> .*,"/"  'SMTPusername' => '$SMTPusername',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPpassword' *=> .*,"/"  'SMTPpassword' => '$SMTPpassword',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'language' *=> .*,"/"  'language'             => '$language',"/g /opt/zendto/config/preferences.php
+
+# Change max file size. PHP 5 is limited to 4 GB by the default anyway
+
+RUN sed -i s/"^  'maxBytesForDropoff' *=> [0-9]*,.*"/"  'maxBytesForDropoff'     => $maxdropoffsize,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'maxBytesForFile' *=> [0-9]*,.*"/"  'maxBytesForFile'     => $maxeachfilesize,"/g /opt/zendto/config/preferences.php
 
 # Disable captcha because it's a demo:
 
