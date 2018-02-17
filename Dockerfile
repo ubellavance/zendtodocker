@@ -14,7 +14,9 @@ MAINTAINER "ubellavance"
 RUN yum clean all \
 	&& yum update -y
 
-# Install Nagios prereq's and some common stuff (we will get the epel release for the nagios install).
+RUN yum -y install epel-release
+
+# Install prereq's and some common stuff.
 RUN yum install -y \
 	top \
 	clamav \
@@ -33,7 +35,6 @@ RUN yum install -y \
 
 # Install yum repos
 
-RUN yum -y install epel-release
 RUN rpm -ivhf http://zend.to/files/zendto-repo.rpm
 
 # Install ZendTo rpm
@@ -47,6 +48,11 @@ RUN yum clean all
 # Define variables
 ENV container=docker \
 	defaultEmailDomain="lubik.ca" \
+	demouser="demouser1" \
+	demopass="demopass1" \
+	demoaddress="demo@domain.com" \
+	demofullname="demofull1" \
+	demoorg="demoorg1" \
 	language="fr_FR" \
 	serverRoot="zendto.lubik.ca" \
 	SMTPserver="relais.videotron.ca" \
@@ -86,6 +92,9 @@ RUN sed -i s/"'captcha' => .*"/"'captcha' => 'disabled',"/g /opt/zendto/config/p
 
 RUN sed -i 's-/var/www/html-/opt/zendto/www-g' /etc/httpd/conf/httpd.conf
 RUN sed -i 's-/var/www-/opt/zendto/www-g' /etc/httpd/conf/httpd.conf
+
+# Create demo user
+RUN (echo $demopass; echo $demopass) | /opt/zendto/bin/adduser.php /opt/zendto/config/preferences.php "$demouser" "$demoaddress" "$demofullname" "$demoorg" ""
 
 # Todo: Configure or disable virus scanning
 
