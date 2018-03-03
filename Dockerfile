@@ -47,29 +47,75 @@ RUN yum clean all
 
 # Define variables
 ENV container=docker \
+	#allowEmailPasscode="TRUE" \
+	allowEmailPasscode="FALSE" \
+	#allowEmailRecipients="TRUE" \
+	allowEmailRecipients="FALSE" \
+	#allowExternalUploads="TRUE" \
+	allowExternalUploads="FALSE" \
+	#bccExternalSender="FALSE" \
+	bccExternalSender="TRUE" \
+	#bccSender="FALSE" \
+	bccSender="TRUE" \
+# Disable virus scanning... Demo
 	clamdscan="DISABLED" \
+# Disable captcha, demo
+	captcha="disabled" \
 	defaultEmailDomain="lubik.ca" \
+	#defaultEmailPasscode="TRUE" \
+	defaultEmailPasscode="FALSE" \
 	demouser="demouser1" \
 	demopass="demopass1" \
 	demoaddress="demo@domain.com" \
 	demofullname="demofull1" \
 	demoorg="demoorg1" \
+	#emailSenderIP="TRUE" \
+	emailSenderIP="FALSE" \
+	#humanDownloads="TRUE" \
+	humanDownloads="FALSE" \
+	#language="en_US" \
 	language="fr_FR" \
-# 2GB
-	maxdropoffsize="2147483648" \
-	maxeachfilesize="2147483648" \
+	libraryDirectory="NSSDROPBOX_DATA_DIR."library"" \
+	#localIPSubnets="array('152.78','10.','192.168.')" \
+	localIPSubnets="array('10.','192.168.')" \
+	#maxBytesForChecksum="209715200" \
 	maxBytesForChecksum="20971520" \
+	#maxNoteLength="1000" \
+	maxNoteLength="100" \
+	#maxPickupFailures="50" \
+	maxPickupFailures="5" \
+	#maxSubjectLength="100" \
+	maxSubjectLength="10" \
+	
+# 2GB
+	#maxdropoffsize="21474836480" \
+	maxdropoffsize="2147483648" \
+	#maxeachfilesize="21474836480" \
+	maxeachfilesize="2147483648" \
+	#numberOfDaysToRetain="14" \
 	numberOfDaysToRetain="12" \
-	requestTTL="60480" \
+	#requestTo="" \
+	requestTo="tickets@domain.com" \
+	#requestTTL="60480" \
+	requestTTL="6048" \
+	#serverRoot="http://zendto.soton.ac.uk/" \
 	serverRoot="zendto.lubik.ca" \
+	#showRecipsOnPickup="FALSE" \
 	showRecipsOnPickup="TRUE" \
 	SMTPserver="relais.videotron.ca" \
 	SMTPport="25" \
 	SMTPsecure="true" \
 	SMTPusername="ugousername" \
 	SMTPpassword="ugopassword" \
+	#useRealProgressBar="TRUE" \
 	useRealProgressBar="FALSE" \
+	#usingLibrary="FALSE" \
+	usingLibrary="TRUE" \
+	#warnDaysBeforeDeletion="0" \
 	warnDaysBeforeDeletion="1" \
+	#wordlist="numbers" \
+	wordlist="words" \
+	
 
 	ServiceTitle="ZendTo" \
 	OrganizationShortName="Lubik" \
@@ -98,7 +144,20 @@ RUN sed -i s/"^  'maxBytesForChecksum' *=> [0-9]*,.*"/"  'maxBytesForChecksum'  
 RUN sed -i s/"^  'language' *=> .*,"/"  'language'             => '$language',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'showRecipsOnPickup' *=> .*,"/"  'showRecipsOnPickup'   => $showRecipsOnPickup,"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'useRealProgressBar' *=> .*,"/"  'useRealProgressBar'   => $useRealProgressBar,"/g /opt/zendto/config/preferences.php
-RUN sed -i s/"^  'requestTTL' *=> '.*',"/"  'requestTTL'   => '$requestTTL',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'requestTTL' *=> .*,"/"  'requestTTL'   => $requestTTL,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'wordlist' *=> .*,"/"  'wordlist'   => '$wordlist',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'requestTo' *=> .*,"/"  'requestTo'   => '$requestTo',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'allowExternalUploads' *=> .*,"/"  'allowExternalUploads'   => $allowExternalUploads,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'maxNoteLength' *=> .*,"/"  'maxNoteLength'   => $maxNoteLength,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'maxSubjectLength' *=> .*,"/"  'maxSubjectLength'   => $maxSubjectLength,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'humanDownloads' *=> .*,"/"  'humanDownloads'   => $humanDownloads,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'maxPickupFailures' *=> .*,"/"  'maxPickupFailures'   => $maxPickupFailures,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'allowEmailRecipients' *=> .*,"/"  'allowEmailRecipients'   => $allowEmailRecipients,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'allowEmailPasscode' *=> .*,"/"  'allowEmailPasscode'   => $allowEmailPasscode,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'defaultEmailPasscode' *=> .*,"/"  'defaultEmailPasscode'   => $defaultEmailPasscode,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'emailSenderIP' *=> .*,"/"  'emailSenderIP'   => $emailSenderIP,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'bccSender' *=> .*,"/"  'bccSender'   => $bccSender,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'bccExternalSender' *=> .*,"/"  'bccExternalSender'   => $bccExternalSender,"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPserver' *,=> '.*',"/"  'SMTPserver'   => '$SMTPserver',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPport' *=> [0-9]*,"/"  'SMTPport'     => $SMTPport,"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPsecure' *=> .*,"/"  'SMTPsecure'   => '$SMTPsecure',"/g /opt/zendto/config/preferences.php
@@ -108,7 +167,7 @@ RUN sed -i s/"^  'SMTPpassword' *=> .*,"/"  'SMTPpassword' => '$SMTPpassword',"/
 
 # Disable captcha because it's a demo:
 
-RUN sed -i s/"'captcha' => .*"/"'captcha' => 'disabled',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"'captcha' => .*"/"'captcha' => '$captcha',"/g /opt/zendto/config/preferences.php
 
 # httpd
 
