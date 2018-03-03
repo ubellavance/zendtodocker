@@ -47,6 +47,7 @@ RUN yum clean all
 
 # Define variables
 ENV container=docker \
+	clamdscan="DISABLED" \
 	defaultEmailDomain="lubik.ca" \
 	demouser="demouser1" \
 	demopass="demopass1" \
@@ -57,13 +58,19 @@ ENV container=docker \
 # 2GB
 	maxdropoffsize="2147483648" \
 	maxeachfilesize="2147483648" \
+	maxBytesForChecksum="20971520" \
+	numberOfDaysToRetain="12" \
+	requestTTL="60480" \
 	serverRoot="zendto.lubik.ca" \
+	showRecipsOnPickup="TRUE" \
 	SMTPserver="relais.videotron.ca" \
 	SMTPport="25" \
 	SMTPsecure="true" \
 	SMTPusername="ugousername" \
 	SMTPpassword="ugopassword" \
-	clamdscan="DISABLED" \
+	useRealProgressBar="FALSE" \
+	warnDaysBeforeDeletion="1" \
+
 	ServiceTitle="ZendTo" \
 	OrganizationShortName="Lubik" \
 	OrganizationShortType="Organization" \
@@ -79,18 +86,25 @@ RUN cp /opt/zendto/config/zendto.conf /root/
 RUN cp /opt/zendto/config/preferences.php /root/
 RUN sed -i s/"^OrganizationShortName = .*"/"OrganizationShortName = \"$OrganizationShortName\""/g /opt/zendto/config/zendto.conf
 RUN sed -i s/"^OrganizationShortType = .*"/"OrganizationShortType = \"$OrganizationShortType\""/g /opt/zendto/config/zendto.conf
-RUN sed -i s/"^  'defaultEmailDomain' *=> '.*',"/"  'defaultEmailDomain'   => '$defaultEmailDomain',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'defaultEmailDomain' *=> '.*',"/"  'defaultEmailDomain' => '$defaultEmailDomain',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'serverRoot' *=> '.*',"/"  'serverRoot'           => '$serverRoot',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'numberOfDaysToRetain' *=> [0-9]*,"/"  'numberOfDaysToRetain' => $numberOfDaysToRetain,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'warnDaysBeforeDeletion' *=> [0-9]*,"/"  'warnDaysBeforeDeletion' => $warnDaysBeforeDeletion,"/g /opt/zendto/config/preferences.php
+# Change max file size. PHP 5 is limited to 4 GB by the default anyway
+RUN sed -i s/"^  'maxBytesForDropoff' *=> [0-9]*,.*"/"  'maxBytesForDropoff'   => $maxdropoffsize,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'maxBytesForFile' *=> [0-9]*,.*"/"  'maxBytesForFile'      => $maxeachfilesize,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'maxBytesForChecksum' *=> [0-9]*,.*"/"  'maxBytesForChecksum'      => $maxBytesForChecksum,"/g /opt/zendto/config/preferences.php
+
+RUN sed -i s/"^  'language' *=> .*,"/"  'language'             => '$language',"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'showRecipsOnPickup' *=> .*,"/"  'showRecipsOnPickup'   => $showRecipsOnPickup,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'useRealProgressBar' *=> .*,"/"  'useRealProgressBar'   => $useRealProgressBar,"/g /opt/zendto/config/preferences.php
+RUN sed -i s/"^  'requestTTL' *=> '.*',"/"  'requestTTL'   => '$requestTTL',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPserver' *,=> '.*',"/"  'SMTPserver'   => '$SMTPserver',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPport' *=> [0-9]*,"/"  'SMTPport'     => $SMTPport,"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPsecure' *=> .*,"/"  'SMTPsecure'   => '$SMTPsecure',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPusername' *=> .*,"/"  'SMTPusername' => '$SMTPusername',"/g /opt/zendto/config/preferences.php
 RUN sed -i s/"^  'SMTPpassword' *=> .*,"/"  'SMTPpassword' => '$SMTPpassword',"/g /opt/zendto/config/preferences.php
-RUN sed -i s/"^  'language' *=> .*,"/"  'language'             => '$language',"/g /opt/zendto/config/preferences.php
 
-# Change max file size. PHP 5 is limited to 4 GB by the default anyway
-
-RUN sed -i s/"^  'maxBytesForDropoff' *=> [0-9]*,.*"/"  'maxBytesForDropoff'     => $maxdropoffsize,"/g /opt/zendto/config/preferences.php
-RUN sed -i s/"^  'maxBytesForFile' *=> [0-9]*,.*"/"  'maxBytesForFile'     => $maxeachfilesize,"/g /opt/zendto/config/preferences.php
 
 # Disable captcha because it's a demo:
 
